@@ -14,6 +14,7 @@ export SPARK_VERSION=${SPARK_VERSION:-"2.0.0"}
 # Use absolute path here, do NOT apply /opt/spark here since we need to support multiple version of Spark
 export SPARK_HOME=${SPARK_HOME:-"/opt/alti-spark-$SPARK_VERSION"}
 export SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-"2.11"}
+export HIVE_SKIP_SPARK_ASSEMBLY=${HIVE_SKIP_SPARK_ASSEMBLY:-"true"}
 
 # - SPARK_CLASSPATH, default classpath entries to append
 # Altiscale local libs and folders

@@ -5,7 +5,7 @@
 
 curr_dir=`dirname $0`
 curr_dir=`cd $curr_dir; pwd`
-testcase_shell_file_01=$curr_dir/pysparkshell_examples.txt
+testcase_shell_file_01=$curr_dir/test_statements/pysparkshell_examples.txt
 
 spark_home=${SPARK_HOME:='/opt/spark'}
 spark_conf=""

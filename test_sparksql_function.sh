@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh 
 
 # Run the test case as alti-test-01
 # /bin/su - alti-test-01 -c "./test_spark/test_spark_shell.sh"
@@ -32,8 +32,6 @@ fi
 curr_dir=`dirname $0`
 curr_dir=`cd $curr_dir; pwd`
 spark_test_dir=""
-
-hive_home=${HIVE_HOME:-"/opt/hive"}
 
 if [ ! -f "$spark_test_dir/pom.xml" ] ; then
   echo "warn - correcting test directory from $spark_test_dir to $curr_dir"
@@ -79,10 +77,6 @@ test_drop_parquet_table_sql1="DROP TABLE $parquet_table_name"
 test_drop_database_sql1="USE default; DROP DATABASE IF EXISTS ${db_name}"
 
 hadoop_ver=$(hadoop version | head -n 1 | grep -o 2.*.* | cut -d"-" -f1 | tr -d '\n')
-sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
-sparksql_hivethriftjars="$spark_home/lib/spark-hive-thriftserver_${SPARK_SCALA_VERSION}.jar"
-hive_jars=$sparksql_hivejars,$sparksql_hivethriftjars,$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ',')
-hive_jars_colon=$sparksql_hivejars:$sparksql_hivethriftjars:$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ':')
 
 echo "ok - detected hadoop version $hadoop_ver for testing. CTAS does not work on Hive 0.13.1"
 # queue_name="--queue interactive"
@@ -90,19 +84,17 @@ queue_name=""
 sql_ret_code=""
 # Also demonstrate how to migrate command from Spark 1.4/1.5 to 1.6+
 if [[ $hadoop_ver == 2.4.* ]] ; then
-  ./bin/spark-sql --verbose --master yarn --deploy-mode client --driver-memory 512M --executor-memory 1G --executor-cores 2 --conf spark.eventLog.dir=${spark_event_log_dir}/$USER --conf spark.yarn.dist.files=/etc/spark/hive-site.xml,$hive_jars --driver-java-options "-XX:MaxPermSize=1024M -Djava.library.path=$HADOOP_HOME/lib/native/" --driver-class-path hive-site.xml:$hive_jars_colon $queue_name -e "$test_create_database_sql1; USE $db_name; $test_create_table_sql1 ; $test_alter_table_sql1 ; $test_truncate_table_sql1 ; $test_load_data_sql1 ; $test_select_sql1 ; $test_drop_table_sql1 ; $test_drop_database_sql1 ; "
+  ./bin/spark-sql --verbose \
+    --deploy-mode client $queue_name \
+    --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
+    --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
+    -e "$test_create_database_sql1; USE $db_name; $test_create_table_sql1 ; $test_alter_table_sql1 ; $test_truncate_table_sql1 ; $test_load_data_sql1 ; $test_select_sql1 ; $test_drop_table_sql1 ; $test_drop_database_sql1 ; "
   sql_ret_code=$?
 elif [[ $hadoop_ver == 2.7.* ]] ; then
   ./bin/spark-sql --verbose \
-    --master yarn --deploy-mode client --driver-memory 512M \
-    --jars $spark_conf/hive-site.xml,$sparksql_hivejars \
-    --executor-memory 1G --executor-cores 2 \
-    --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties $queue_name \
-    --archives hdfs:///user/$USER/apps/$(basename $(readlink -f $HIVE_HOME))-lib.zip#hive \
+    --deploy-mode client $queue_name \
     --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
     --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
-    --conf spark.executor.extraClassPath=$(basename $sparksql_hivejars):$(basename $sparksql_hivethriftjars) \
-    --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
     -e "$test_create_database_sql1; USE $db_name; $test_create_table_sql1 ; $test_alter_table_sql1 ; $test_truncate_table_sql1 ; $test_load_data_sql1 ; $test_create_orc_sql1; $test_create_parquet_sql1; $test_select_sql1 ; $test_select_orc_sql1; $test_select_parquet_sql1; $test_drop_table_sql1 ; $test_drop_orc_table_sql1; $test_drop_parquet_table_sql1; $test_drop_database_sql1;"
   sql_ret_code=$?
 else
