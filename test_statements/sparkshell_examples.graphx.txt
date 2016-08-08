@@ -37,5 +37,5 @@ println(s"Num Edges = $numEdges")
 println(s"Creation time = ${loadTime/1000.0} seconds")
 println(s"Run time = ${runTime/1000.0} seconds")
 
-exit
+sys.exit
 

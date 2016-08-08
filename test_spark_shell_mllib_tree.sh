@@ -1,11 +1,11 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # Run the test case as alti-test-01
 # /bin/su - alti-test-01 -c "./test_spark/test_spark_shell.sh"
 
 curr_dir=`dirname $0`
 curr_dir=`cd $curr_dir; pwd`
-testcase_shell_file_01="$curr_dir/sparkshell_examples.mllib.tree.txt"
+testcase_shell_file_01=$curr_dir/test_statements/sparkshell_examples.mllib.tree.txt
 spark_home=${SPARK_HOME:='/opt/spark'}
 spark_conf=""
 spark_version=$SPARK_VERSION
@@ -58,7 +58,7 @@ spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.con
 
 # queue_name="--queue interactive"
 queue_name=""
-./bin/spark-shell --verbose --master yarn --deploy-mode client --driver-memory 1024M --conf spark.eventLog.dir=${spark_event_log_dir}/$USER $queue_name << EOT
+./bin/spark-shell --verbose --deploy-mode client --driver-memory 1024M --conf spark.eventLog.dir=${spark_event_log_dir}/$USER $queue_name << EOT
 `cat $testcase_shell_file_01`
 EOT
 

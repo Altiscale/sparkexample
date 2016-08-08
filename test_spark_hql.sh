@@ -80,11 +80,8 @@ queue_name=""
 # The spark.executor.extraClassPath here is just for demonstration, and explicitly telling people you 
 # need to be aware of this for the executor classpath
 ./bin/spark-submit --verbose \
-  --master yarn --deploy-mode cluster \
-  --jars $spark_conf/hive-site.xml,$sparksql_hivejars \
-  --archives hdfs:///user/$USER/apps/$(basename $(readlink -f $HIVE_HOME))-lib.zip#hive \
+  --deploy-mode cluster $queue_name \
   --driver-memory 512M --executor-memory 2048M --executor-cores 3 \
-  --driver-class-path hive-site.xml:yarncluster-driver-log4j.properties $queue_name \
   --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --conf spark.yarn.preserve.staging.files=true \

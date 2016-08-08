@@ -22,5 +22,5 @@ hiveContext.sql("LOAD DATA LOCAL INPATH '/opt/spark/examples/src/main/resources/
 // Queries are expressed in HiveQL
 hiveContext.sql("FROM spark_hive_test_table SELECT key, value").collect().foreach(println)
 
-exit
+sys.exit
 
