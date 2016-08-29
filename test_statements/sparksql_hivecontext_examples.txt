@@ -16,5 +16,5 @@ hiveContext.sql("LOAD DATA LOCAL INPATH '/opt/spark/examples/src/main/resources/
 // hiveContext.sql("FROM spark_hive_test_yarn_cluster_table SELECT key, value").collect().foreach(println)
 hiveContext.sql("FROM spark_hive_test_table SELECT key, value").collect().foreach(println)
 
-sys.exit
+exit
 

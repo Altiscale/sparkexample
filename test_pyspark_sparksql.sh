@@ -60,8 +60,12 @@ spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.con
 # queue_name="--queue interactive"
 queue_name=""
 ./bin/spark-submit --verbose \
-  --deploy-mode client $queue_name \
-  --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --master yarn --deploy-mode client $queue_name \
+  --jars $spark_conf/hive-site.xml,$sparksql_hivejars \
+  --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties \
+  --archives hdfs:///user/$USER/apps/$(basename $(readlink -f $HIVE_HOME))-lib.zip#hive \
+  --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=/opt/hadoop/lib/native/" \
+  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=/opt/hadoop/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --py-files $spark_home/test_spark/src/main/python/pyspark_hql.py \
   $spark_home/test_spark/src/main/python/pyspark_hql.py

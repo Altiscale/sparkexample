@@ -5,7 +5,7 @@
 
 curr_dir=`dirname $0`
 curr_dir=`cd $curr_dir; pwd`
-testcase_shell_file_01="$curr_dir/test_statements/sparkshell_examples.graphx.txt"
+testcase_shell_file_01="$curr_dir/test_statements/sparkshell_examples.grapx.txt"
 spark_home=${SPARK_HOME:='/opt/spark'}
 spark_conf=""
 spark_version=$SPARK_VERSION
@@ -57,7 +57,7 @@ spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.con
 
 # queue_name="--queue interactive"
 queue_name=""
-./bin/spark-shell --verbose --deploy-mode client --driver-memory 1536M --conf spark.eventLog.dir=${spark_event_log_dir}/$USER $queue_name --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native" << EOT
+./bin/spark-shell --verbose --master yarn --deploy-mode client --driver-memory 1536M --conf spark.eventLog.dir=${spark_event_log_dir}/$USER $queue_name << EOT
 `cat $testcase_shell_file_01`
 EOT
 

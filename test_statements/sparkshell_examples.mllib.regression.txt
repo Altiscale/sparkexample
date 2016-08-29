@@ -25,5 +25,5 @@ val valuesAndPreds = parsedData.map { point =>
 val MSE = valuesAndPreds.map{ case(v, p) => math.pow((v - p), 2)}.reduce(_ + _)/valuesAndPreds.count
 println("training Mean Squared Error = " + MSE)
 
-sys.exit
+exit
 

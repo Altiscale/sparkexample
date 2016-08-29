@@ -51,7 +51,8 @@ queue_name=""
 ./bin/spark-submit --verbose \
   --master yarn --deploy-mode cluster $queue_name \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
-  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native" \
+  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties" \
+  --conf spark.driver.extraClassPath=yarncluster-driver-log4j.properties \
   --class org.apache.spark.examples.SparkPi \
   "${SPARK_EXAMPLE_JAR}"
 

@@ -65,5 +65,5 @@ scala_n_examples_rdd.repartition(1).saveAsTextFile("spark/test/README.filter.rep
 
 
 
-sys.exit
+exit
 

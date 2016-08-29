@@ -80,7 +80,7 @@ test_window_sql1="SELECT * FROM (
 test_window_sql2="SELECT name, country, revenue, PERCENT_RANK() over (PARTITION by country ORDER BY revenue DESC) AS percent_rank FROM $table_name;"
 
 drop_table_sql="DROP TABLE $table_name"
-drop_database_sql="USE default; DROP DATABASE IF EXISTS ${db_name}"
+drop_database_sql="DROP DATABASE IF EXISTS ${db_name}"
 
 hadoop_ver=$(hadoop version | head -n 1 | grep -o 2.*.* | cut -d"-" -f1 | tr -d '\n')
 sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
@@ -94,20 +94,19 @@ queue_name=""
 sql_ret_code=""
 # Also demonstrate how to migrate command from Spark 1.4/1.5 to 1.6+
 if [[ $hadoop_ver == 2.4.* ]] ; then
-  ./bin/spark-sql --verbose \
-    --master yarn --deploy-mode client $queue_name \
-    --driver-memory 512M --executor-memory 1G --executor-cores 2 \
-    --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
-    --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$hive_jars \
-    --driver-java-options "-XX:MaxPermSize=1024M -Djava.library.path=/opt/hadoop/lib/native/" \
-    --driver-class-path hive-site.xml:$hive_jars_colon \
-    -e "$create_database_sql; USE $db_name; $create_table_sql ; $load_data_sql ; $test_window_sql1 ; $test_window_sql2 ; $drop_table_sql ; $drop_database_sql ; "
+  ./bin/spark-sql --verbose --master yarn --deploy-mode client --driver-memory 512M --executor-memory 1G --executor-cores 2 --conf spark.eventLog.dir=${spark_event_log_dir}/$USER --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$hive_jars --driver-java-options "-XX:MaxPermSize=1024M -Djava.library.path=/opt/hadoop/lib/native/" --driver-class-path hive-site.xml:$hive_jars_colon $queue_name -e "$create_database_sql; USE $db_name; $create_table_sql ; $load_data_sql ; $test_window_sql1 ; $test_window_sql2 ; $drop_table_sql ; $drop_database_sql ; "
   sql_ret_code=$?
 elif [[ $hadoop_ver == 2.7.* ]] ; then
   ./bin/spark-sql --verbose \
-    --master yarn --deploy-mode client $queue_name \
+    --master yarn --deploy-mode client \
+    --jars $spark_conf/hive-site.xml,$sparksql_hivejars \
+    --driver-memory 512M --executor-memory 1G --executor-cores 2 \
+    --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties $queue_name \
+    --archives hdfs:///user/$USER/apps/$(basename $(readlink -f $HIVE_HOME))-lib.zip#hive \
     --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
     --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
+    --conf spark.executor.extraClassPath=$(basename $sparksql_hivejars):$(basename $sparksql_hivethriftjars) \
+    --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
     -e "$create_database_sql; USE $db_name; $create_table_sql ; $load_data_sql ; $test_window_sql1 ; $test_window_sql2 ; $drop_table_sql ; $drop_database_sql ;"
   sql_ret_code=$?
 else

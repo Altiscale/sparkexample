@@ -59,8 +59,8 @@ spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.con
 queue_name=""
 ./bin/spark-submit --verbose \
   --master yarn --deploy-mode cluster \
+  --driver-java-options "-Djava.library.path=/opt/hadoop/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER $queue_name \
-  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native" \
   --class SparkSQLTestCase1SQLContextApp \
   $spark_test_dir/${app_name}-${app_ver}.jar
 

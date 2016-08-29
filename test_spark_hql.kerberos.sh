@@ -69,11 +69,14 @@ queue_name=""
 # The spark.executor.extraClassPath here is just for demonstration, and explicitly telling people you 
 # need to be aware of this for the executor classpath
 ./bin/spark-submit --verbose \
-  --master yarn --deploy-mode client $queue_name \
+  --master yarn --deploy-mode client \
+  --jars $spark_conf/hive-site.xml,$sparksql_hivejars \
   --driver-memory 512M --executor-memory 2048M --executor-cores 3 \
-  --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties $queue_name \
+  --archives hdfs:///user/$USER/apps/$(basename $(readlink -f $HIVE_HOME))-lib.zip#hive \
+  --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=/opt/hadoop/lib/native/" \
+  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=/opt/hadoop/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
-  --conf spark.sql.warehouse.dir=file:///tmp/$USER/spark-warehouse \
   --class SparkSQLTestCase2HiveContextYarnClientApp \
   $spark_test_dir/${app_name}-${app_ver}.jar $spark_home/examples/src/main/resources/kv1.txt spark_hive_test_yarn_client_table
 

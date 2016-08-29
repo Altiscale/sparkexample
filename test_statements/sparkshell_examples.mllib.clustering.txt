@@ -25,4 +25,4 @@ val WSSSE = model.computeCost(parsedData)
 
 println("Within Set Sum of Squared Errors = " + WSSSE)
 
-sys.exit
+exit

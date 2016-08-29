@@ -57,7 +57,7 @@ spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.con
 
 # queue_name="--queue interactive"
 queue_name=""
-./bin/spark-shell --verbose --deploy-mode client --driver-memory 1024M --conf spark.eventLog.dir=${spark_event_log_dir}/$USER $queue_name << EOT
+./bin/spark-shell --verbose --master yarn --deploy-mode client --driver-memory 1024M --conf spark.eventLog.dir=${spark_event_log_dir}/$USER $queue_name << EOT
 `cat $testcase_shell_file_01`
 EOT
 

@@ -4,8 +4,7 @@
 # Multiple invocation will result in corrupted zip file
 # Last run wins
 
-spark_conf=${SPARK_CONF_DIR:-"/etc/spark"}
-source $spark_conf/spark-env.sh
+source /etc/alti-spark-1.6.2/spark-env.sh
 
 mypid=$$
 tmp_hive_fname_zip=$(basename $(readlink -f $HIVE_HOME))-lib.zip
