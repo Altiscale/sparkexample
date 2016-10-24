@@ -10,7 +10,7 @@ JAVA_HOME=${JAVA_HOME:-"/usr/java/default"}
 # Copy it as spark-env.sh and edit it to configure Spark for your site.
 # We honor bin/load-spark-env.sh values, and any external assignment from
 # users.
-export SPARK_VERSION=${SPARK_VERSION:-"2.0.0"}
+export SPARK_VERSION=${SPARK_VERSION:-"2.0.1"}
 # Use absolute path here, do NOT apply /opt/spark here since we need to support multiple version of Spark
 export SPARK_HOME=${SPARK_HOME:-"/opt/alti-spark-$SPARK_VERSION"}
 export SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-"2.11"}
