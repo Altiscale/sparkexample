@@ -14,7 +14,7 @@
 # under /etc/alti-spark-x.x.x
 
 # Allow to honor default or user customize spark-env.sh
-[ -f /etc/alti-spark-1.6.2/spark-env.sh ] && . /etc/alti-spark-1.6.2/spark-env.sh
+[ -f /etc/alti-spark-1.6.3/spark-env.sh ] && . /etc/alti-spark-1.6.3/spark-env.sh
 
 spark_conf_dir_tmp=${SPARK_CONF_DIR:-"/etc/alti-spark-$SPARK_VERSION"}
 echo "ok - applying default or customized Spark conf directory $spark_conf_dir_tmp"

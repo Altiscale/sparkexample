@@ -5,7 +5,7 @@
 # /bin/su - spark -c "./test_spark/test_spark_thriftserver2.sh"
 
 # Load default values from Chef
-[ -f /etc/sysconfig/sparktsd-1.6.2 ] && . /etc/sysconfig/sparktsd-1.6.2
+[ -f /etc/sysconfig/sparktsd-1.6.3 ] && . /etc/sysconfig/sparktsd-1.6.3
 
 curr_dir=`dirname $0`
 curr_dir=`cd $curr_dir; pwd`
@@ -13,7 +13,7 @@ spark_conf=${SPARK_CONF_DIR:-"$SPARKTS_DEFAULT_CONFIG"}
 
 source $spark_conf/spark-env.sh
 
-spark_version=${SPARK_VERSION:-"1.6.2"}
+spark_version=${SPARK_VERSION:-"1.6.3"}
 spark_home=${SPARK_HOME:="/opt/alti-spark-$spark_version"}
 scala_version=${SPARK_SCALA_VERSION:-"2.10"}
 spark_test_dir="$spark_home/test_spark"
