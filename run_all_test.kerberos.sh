@@ -14,7 +14,7 @@ all_kerberos_testcase=(test_spark_submit.sh test_spark_shell_graphx.sh test_spar
 curr_dir=`dirname $0`
 curr_dir=`cd $curr_dir; pwd`
 
-export SPARK_VERSION="2.0.2"
+export SPARK_VERSION="2.1.0"
 # Change this to your own home directory if necessary
 export SPARK_HOME="/opt/alti-spark-$SPARK_VERSION"
 # You can specify different settings for the same test case via SPARK_CONF_DIR
