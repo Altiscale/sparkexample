@@ -46,6 +46,7 @@ spark_event_log_dir=$(grep 'spark.eventLog.dir' /etc/spark/spark-defaults.conf |
   --executor-memory 1G \
   --executor-cores 2 \
   --archives hdfs:///user/$USER/apps/$(basename $(readlink -f $HIVE_HOME))-lib.zip#hive \
+  --jars $hive_jars \
   --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties \
   --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.executor.extraClassPath=$(basename $sparksql_hivejars):$(basename $sparksql_hivethriftjars) \
