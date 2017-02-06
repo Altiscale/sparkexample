@@ -85,7 +85,7 @@ queue_name=""
   --archives hdfs:///user/$USER/apps/$(basename $(readlink -f $HIVE_HOME))-lib.zip#hive \
   --driver-memory 512M --executor-memory 2048M --executor-cores 3 \
   --driver-class-path hive-site.xml:yarncluster-driver-log4j.properties $queue_name \
-  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.driver.extraJavaOptions="-XX:MaxPermSize=256M -Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --conf spark.yarn.preserve.staging.files=true \
   --class SparkSQLTestCase2HiveContextYarnClusterApp \
