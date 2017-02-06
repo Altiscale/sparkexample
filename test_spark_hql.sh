@@ -83,7 +83,7 @@ queue_name=""
   --driver-memory 512M --executor-memory 2048M --executor-cores 3 \
   --driver-class-path hive-site.xml:yarncluster-driver-log4j.properties $queue_name \
   --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$spark_conf/yarncluster-driver-log4j.properties,$spark_conf/executor-log4j.properties,$hive_jars \
-  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.driver.extraJavaOptions="-XX:MaxPermSize=256M -Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.executor.extraJavaOptions="-Dlog4j.configuration=executor-log4j.properties -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --class SparkSQLTestCase2HiveContextYarnClusterApp \
