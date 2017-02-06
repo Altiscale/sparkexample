@@ -82,7 +82,7 @@ queue_name=""
 ./bin/spark-submit --verbose \
   --deploy-mode cluster $queue_name \
   --driver-memory 512M --executor-memory 2048M --executor-cores 3 \
-  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.driver.extraJavaOptions="-XX:MaxPermSize=256M -Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --conf spark.yarn.preserve.staging.files=true \
   --class SparkSQLTestCase1HiveContextYarnClusterApp \
