@@ -1,0 +1,4 @@
+import org.apache.spark.sql.SapSQLContext
+val vc = new SapSQLContext(sc)
+vc.sql("SHOW TABLES").show
+vc.sql("SELECT COUNT(*) FROM INTRUSION_DETECTION").collect().foreach(println)
