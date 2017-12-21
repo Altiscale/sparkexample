@@ -20,13 +20,13 @@
 #
 # A demo wrapper shell script for starting the SparkSQL shell with HiveContext libraries
 
-SPARK_HOME="/opt/alti-spark-2.1.1"
+SPARK_HOME="/opt/alti-spark-2.1.2"
 
 . "${SPARK_HOME}"/bin/load-spark-env.sh
 source ${SPARK_HOME}/test_spark/deploy_hive_jar.sh
 
 export HIVE_HOME=${HIVE_HOME:-"/opt/hive"}
-export SPARK_VERSION=${SPARK_VERSION:-"2.1.1"}
+export SPARK_VERSION=${SPARK_VERSION:-"2.1.2"}
 export SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-"2.11"}
 
 spark_conf=${SPARK_CONF_DIR:-"/etc/alti-spark-$SPARK_VERSION"}
