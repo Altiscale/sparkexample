@@ -16,11 +16,11 @@ scalaVersion := "2.11.8"
 
 // resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
 
-// libraryDependencies += "local.org.apache.spark" % "spark-assembly_2.11" % "2.2.0"
+// libraryDependencies += "local.org.apache.spark" % "spark-assembly_2.11" % "2.2.1"
 
-// libraryDependencies += "local.org.apache.spark" % "spark-sql_2.11" % "2.2.0"
+// libraryDependencies += "local.org.apache.spark" % "spark-sql_2.11" % "2.2.1"
 
-// libraryDependencies += "local.org.apache.spark" % "spark-catalyst_2.11" % "2.2.0"
+// libraryDependencies += "local.org.apache.spark" % "spark-catalyst_2.11" % "2.2.1"
 
 // OR 
 // BUILD option 2 (easier)
