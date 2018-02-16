@@ -748,7 +748,7 @@
           </execution>
         </executions>
         <configuration>
-         <args>
+          <args>
             <arg>-unchecked</arg>
             <arg>-deprecation</arg>
             <arg>-feature</arg>
@@ -763,6 +763,7 @@
             <javacArg>-target</javacArg>
             <javacArg>${java.version}</javacArg>
             <javacArg>-Xlint:all,-serial,-path</javacArg>
+            <javacArg>-Ylog-classpath</javacArg>
           </javacArgs>
         </configuration>
       </plugin>
