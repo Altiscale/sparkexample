@@ -537,7 +537,6 @@
 <!-- use globally defined properties as the default corresponds to spark-2.3
       <properties>
         <hadoop.version>2.7.3</hadoop.version>
-        <!-- hive.version here refers to Spark custom built hive JARs with groupId org.spark-project.hive -->
         <hive.version>${hive.version}</hive.version>
         <yarn.version>${hadoop.version}</yarn.version>
       </properties>
