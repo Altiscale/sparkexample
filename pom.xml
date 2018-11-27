@@ -259,7 +259,7 @@
         </dependency>
         <dependency>
           <groupId>local.org.apache.spark</groupId>
-          <artifactId>spark-streaming-kafka-0-8_${scala.binary.version}</artifactId>
+          <artifactId>spark-streaming-kafka-0-10_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
@@ -652,6 +652,39 @@
           <groupId>org.apache.kafka</groupId>
           <artifactId>kafka_${scala.binary.version}</artifactId>
           <version>0.8.2.1</version>
+          <exclusions>
+            <exclusion>
+              <groupId>com.sun.jmx</groupId>
+              <artifactId>jmxri</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>com.sun.jdmk</groupId>
+              <artifactId>jmxtools</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.sf.jopt-simple</groupId>
+              <artifactId>jopt-simple</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-simple</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.zookeeper</groupId>
+              <artifactId>zookeeper</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>kafka10-provided</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.kafka</groupId>
+          <artifactId>kafka_${scala.binary.version}</artifactId>
+          <version>0.10.0.1</version>
           <exclusions>
             <exclusion>
               <groupId>com.sun.jmx</groupId>
