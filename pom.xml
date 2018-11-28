@@ -238,7 +238,7 @@
           <artifactId>spark-core_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
-          </exclusions>
+          <exclusions>
             <exclusion>
               <groupId>org.pentaho</groupId>
               <artifactId>pentaho-aggdesigner-algorithm</artifactId>
@@ -250,7 +250,7 @@
           <artifactId>spark-sql_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
-          </exclusions>
+          <exclusions>
             <exclusion>
               <groupId>org.pentaho</groupId>
               <artifactId>pentaho-aggdesigner-algorithm</artifactId>
@@ -286,7 +286,7 @@
           <artifactId>spark-hive_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
-          </exclusions>
+          <exclusions>
             <exclusion>
               <groupId>org.pentaho</groupId>
               <artifactId>pentaho-aggdesigner-algorithm</artifactId>
