@@ -238,12 +238,24 @@
           <artifactId>spark-core_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
+          </exclusions>
+            <exclusion>
+              <groupId>org.pentaho</groupId>
+              <artifactId>pentaho-aggdesigner-algorithm</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
           <groupId>local.org.apache.spark</groupId>
           <artifactId>spark-sql_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
+          </exclusions>
+            <exclusion>
+              <groupId>org.pentaho</groupId>
+              <artifactId>pentaho-aggdesigner-algorithm</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
           <groupId>local.org.apache.spark</groupId>
@@ -274,6 +286,12 @@
           <artifactId>spark-hive_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
+          </exclusions>
+            <exclusion>
+              <groupId>org.pentaho</groupId>
+              <artifactId>pentaho-aggdesigner-algorithm</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <!--
           The following dependencies are already present in the Spark assembly, so we want to force
