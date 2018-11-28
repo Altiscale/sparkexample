@@ -16,8 +16,7 @@
     <spark.version>2.3.2</spark.version>
     <hadoop.version>2.7.3</hadoop.version>
     <!-- hive.version here refers to Spark custom built hive JARs with groupId org.spark-project.hive -->
-    <!-- <hive.version>1.2.1.spark2</hive.version> -->
-    <hive.version>2.3.2</hive.version>
+    <hive.version>1.2.1.spark2</hive.version>
     <yarn.version>${hadoop.version}</yarn.version>
     <avro.version>1.7.7</avro.version>
     <scala.version>2.11.8</scala.version>
