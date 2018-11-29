@@ -7,7 +7,7 @@
 
   <groupId>com.altiscale.testsuite</groupId>
   <artifactId>altiscale-spark-test-case</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <version>2.3</version>
 
   <!-- Define default values -->
@@ -31,10 +31,12 @@
       <id>spark-localrepo</id>
       <url>file://${user.home}/.m2/repository</url>
     </repository>
+<!--
     <repository>
       <id>conjars.org</id>
       <url>http://conjars.org/repo</url>
     </repository>
+-->
   </repositories>
 
   <profiles>
