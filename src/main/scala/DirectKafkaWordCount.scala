@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-# import kafka.serializer.StringDecoder
+// import kafka.serializer.StringDecoder
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming._
