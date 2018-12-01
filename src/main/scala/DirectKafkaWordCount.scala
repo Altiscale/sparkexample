@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import kafka.serializer.StringDecoder
+# import kafka.serializer.StringDecoder
 
+import org.apache.spark.SparkConf
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka010._
-import org.apache.spark.SparkConf
 
 /**
  * Consumes messages from one or more topics in Kafka and does wordcount.
@@ -55,11 +55,18 @@ object DirectKafkaWordCount {
     // Create direct kafka stream with brokers and topics
     val topicsSet = topics.split(",").toSet
     val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
+/*
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
+*/
+    val messages = KafkaUtils.createDirectStream[String, String](
+      ssc,
+      LocationStrategies.PreferConsistent,
+      ConsumerStrategies.Subscribe[String, String](topicsSet, kafkaParams))
 
     // Get the lines, split them into words, count the words and print
-    val lines = messages.map(_._2)
+    // val lines = messages.map(_._2)
+    val lines = messages.map(_.value)
     lines.print()
     val words = lines.flatMap(_.split(" "))
     val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
