@@ -11,7 +11,7 @@ else
 fi
 
 source $spark_home/test_spark/init_spark.sh
-source $spark_home/test_spark/deploy_hive_jar.sh
+# source $spark_home/test_spark/deploy_hive_jar.sh
 
 # Default SPARK_CONF_DIR is already checked by init_spark.sh
 spark_conf=${SPARK_CONF_DIR:-"/etc/spark"}
@@ -80,9 +80,12 @@ queue_name=""
 # The spark.executor.extraClassPath here is just for demonstration, and explicitly telling people you 
 # need to be aware of this for the executor classpath
 ./bin/spark-submit --verbose \
-  --deploy-mode cluster $queue_name \
+  --master yarn --deploy-mode cluster $queue_name \
   --driver-memory 512M --executor-memory 2048M --executor-cores 3 \
+  --driver-class-path hive-site.xml:yarncluster-driver-log4j.properties $queue_name \
+  --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$spark_conf/yarncluster-driver-log4j.properties,$spark_conf/executor-log4j.properties,$hive_jars \
   --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarncluster-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.executor.extraJavaOptions="-Dlog4j.configuration=executor-log4j.properties -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --conf spark.yarn.preserve.staging.files=true \
   --class SparkSQLTestCase1HiveContextYarnClusterApp \

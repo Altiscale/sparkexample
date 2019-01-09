@@ -16,7 +16,7 @@ else
 fi
 
 source $spark_home/test_spark/init_spark.sh
-source $spark_home/test_spark/deploy_hive_jar.sh
+# source $spark_home/test_spark/deploy_hive_jar.sh
 
 # Default SPARK_CONF_DIR is already checked by init_spark.sh
 spark_conf=${SPARK_CONF_DIR:-"/etc/spark"}
@@ -53,16 +53,30 @@ fi
 
 echo "ok - testing PySpark SQL shell yarn-client mode with simple queries"
 
+app_name=`grep "<artifactId>.*</artifactId>" $spark_test_dir/pom.xml | cut -d">" -f2- | cut -d"<" -f1  | head -n 1`
+app_ver=`grep "<version>.*</version>" $spark_test_dir/pom.xml | cut -d">" -f2- | cut -d"<" -f1 | head -n 1`
+
+if [ ! -f "$spark_test_dir/${app_name}-${app_ver}.jar" ] ; then
+  >&2 echo "fail - $spark_test_dir/${app_name}-${app_ver}.jar test jar does not exist, cannot continue testing, failing!"
+  exit -3
+fi
+
 sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
+hive_jars_colon=$sparksql_hivejars:$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ':')
+hive_jars=$sparksql_hivejars,$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ',')
 spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.conf | tr -s ' ' '\t' | cut -f2)
 
 # pyspark only supports yarn-client mode now
 # queue_name="--queue interactive"
 queue_name=""
 ./bin/spark-submit --verbose \
-  --deploy-mode client $queue_name \
-  --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --master yarn --deploy-mode client $queue_name \
+  --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties:$hive_jars_colon \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
+  --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$spark_conf/executor-log4j.properties,$hive_jars \
+  --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.executor.extraJavaOptions="-Dlog4j.configuration=executor-log4j.properties -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --py-files $spark_home/test_spark/src/main/python/pyspark_hql.py \
   $spark_home/test_spark/src/main/python/pyspark_hql.py
 

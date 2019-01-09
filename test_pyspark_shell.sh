@@ -16,7 +16,7 @@ else
 fi
 
 source $spark_home/test_spark/init_spark.sh
-source $spark_home/test_spark/deploy_hive_jar.sh
+# source $spark_home/test_spark/deploy_hive_jar.sh
 
 # Default SPARK_CONF_DIR is already checked by init_spark.sh
 spark_conf=${SPARK_CONF_DIR:-"/etc/spark"}
@@ -51,17 +51,25 @@ hdfs dfs -put "$spark_test_dir/src/main/resources/normal_sample.txt" spark/test/
 
 echo "ok - testing PySpark REPL shell with various algorithm"
 
-sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
+# sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
+
+sparksql_hivejars="$spark_home/sql/hive/target/spark-hive_${SPARK_SCALA_VERSION}-${spark_version}.jar"
+hive_jars_colon=$sparksql_hivejars:$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ':')
+hive_jars=$sparksql_hivejars,$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ',')
 
 spark_event_log_dir=$(grep 'spark.eventLog.dir' $spark_conf/spark-defaults.conf | tr -s ' ' '\t' | cut -f2)
 
 # queue_name="--queue interactive"
 queue_name=""
 ./bin/spark-submit --verbose \
-  --deploy-mode client $queue_name \
+  --master yarn --deploy-mode client \
+  $queue_name \
+  --driver-class-path /etc/spark/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties:$hive_jars_colon \
+  --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
+  --conf spark.yarn.dist.files=/etc/spark/hive-site.xml,$spark_conf/executor-log4j.properties,$hive_jars \
   --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
-  --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
+  --conf spark.executor.extraJavaOptions="-Dlog4j.configuration=executor-log4j.properties -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --py-files $spark_home/test_spark/src/main/python/pyspark_shell_examples.py \
   $spark_home/test_spark/src/main/python/pyspark_shell_examples.py
 
@@ -70,5 +78,7 @@ if [ $? -ne "0" ] ; then
   exit -3
 fi
 popd
+
+reset
 
 exit 0

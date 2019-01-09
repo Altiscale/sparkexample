@@ -11,7 +11,7 @@ else
 fi
 
 source $spark_home/test_spark/init_spark.sh
-source $spark_home/test_spark/deploy_hive_jar.sh
+# source $spark_home/test_spark/deploy_hive_jar.sh
 
 # Default SPARK_CONF_DIR is already checked by init_spark.sh
 spark_conf=${SPARK_CONF_DIR:-"/etc/spark"}
@@ -58,6 +58,8 @@ if [ ! -f "$spark_test_dir/${app_name}-${app_ver}.jar" ] ; then
 fi
 
 sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
+hive_jars=$sparksql_hivejars,$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ',')
+hive_jars_colon=$sparksql_hivejars:$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ':')
 
 spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.conf | tr -s ' ' '\t' | cut -f2)
 
@@ -71,11 +73,16 @@ queue_name=""
 ./bin/spark-submit --verbose \
   --master yarn --deploy-mode client $queue_name \
   --driver-memory 512M --executor-memory 2048M --executor-cores 3 \
+  --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties $queue_name \
+  --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$spark_conf/yarnclient-driver-log4j.properties,$spark_conf/executor-log4j.properties,$hive_jars \
   --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
+  --conf spark.executor.extraJavaOptions="-Dlog4j.configuration=executor-log4j.properties -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -Djava.library.path=$HADOOP_HOME/lib/native/" \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --conf spark.sql.warehouse.dir=file:///tmp/$USER/spark-warehouse \
   --class SparkSQLTestCase2HiveContextYarnClientApp \
-  $spark_test_dir/${app_name}-${app_ver}.jar $spark_home/examples/src/main/resources/kv1.txt spark_hive_test_yarn_client_table
+  $spark_test_dir/${app_name}-${app_ver}.jar
+  # $spark_test_dir/${app_name}-${app_ver}.jar $spark_home/examples/src/main/resources/kv1.txt spark_hive_test_yarn_client_table
 
 if [ $? -ne "0" ] ; then
   >&2 echo "fail - testing $0 for SparkSQL on HiveQL/HiveContext failed!!"
