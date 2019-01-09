@@ -71,7 +71,7 @@ spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.con
 
 echo "ok - starting thriftserver"
 
-ret=$(./start-thriftserver.sh --driver-class-path hive-site.xml:$hive_jars_colon --conf spark.yarn.dist.files=/etc/spark/hive-site.xml,$hive_jars --conf spark.executor.extraClassPath=$(basename $sparksql_hivejars):$(basename $sparksql_hivethriftjars) --hiveconf hive.server2.thrift.port=$spark_ts2_listen_port --hiveconf hive.server2.thrift.bind.host=$(hostname) --master yarn-client --executor-memory 1G --num-executors 4 --executor-cores 2 --driver-memory 1G --conf spark.locality.wait=10000 --conf spark.shuffle.manager=sort --conf spark.shuffle.consolidateFiles=true --conf spark.rdd.compress=true --conf spark.storage.memoryFraction=0.6 --conf spark.sql.inMemoryColumnarStorage.compressed=true --conf spark.sql.inMemoryColumnarStorage.batchSize=10240 --conf spark.eventLog.dir=${spark_event_log_dir}/$USER)
+ret=$(./start-thriftserver.sh --verbose --driver-class-path $spark_conf/hive-site.xml:$hive_jars_colon --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$hive_jars --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" --conf spark.executor.extraJavaOptions="-Dlog4j.configuration=executor-log4j.properties -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -Djava.library.path=$HADOOP_HOME/lib/native/" --conf spark.executor.extraClassPath=$(basename $sparksql_hivejars):$(basename $sparksql_hivethriftjars) --hiveconf hive.server2.thrift.port=$spark_ts2_listen_port --hiveconf hive.server2.thrift.bind.host=$(hostname) --master yarn-client --executor-memory 1G --num-executors 4 --executor-cores 2 --driver-memory 1G --conf spark.locality.wait=10000 --conf spark.shuffle.manager=sort --conf spark.shuffle.consolidateFiles=true --conf spark.rdd.compress=true --conf spark.storage.memoryFraction=0.6 --conf spark.sql.inMemoryColumnarStorage.compressed=true --conf spark.sql.inMemoryColumnarStorage.batchSize=10240 --conf spark.eventLog.dir=${spark_event_log_dir}/$USER)
 if [ $? -ne "0" ] ; then
   >&2 echo "fail - can't start thriftserver, something went wrong, see $ret"
   exit -3
@@ -122,6 +122,12 @@ if [ "x${pid_ret}" = "x0" ] ; then
 else
   echo "ok - Spark ThriftServer2 PID $spark_pid found"
 fi
+
+echo "ok - =========================================="
+echo "ok - you may execute \"yarn logs -applicationId ${ts2_yarn_app_id}\" to inspect executor logs"
+echo "ok - or inspect $spark_logs for spark driver logs"
+echo "ok - =========================================="
+sleep 3
 
 if [ "x${log_check_ts2}" = "false" -a "x${log_check_ts2}" = "false" -a "x${pid_check_ts2}" = "xfalse" ] ; then
   >&2 echo "fail - all pid check, log check and port check failed, Spark ThriftServer2 is not running, stopping it, and please check!"

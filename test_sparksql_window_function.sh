@@ -13,7 +13,7 @@ else
 fi
 
 source $spark_home/test_spark/init_spark.sh
-source $spark_home/test_spark/deploy_hive_jar.sh
+# source $spark_home/test_spark/deploy_hive_jar.sh
 
 # Default SPARK_CONF_DIR is already checked by init_spark.sh
 spark_conf=${SPARK_CONF_DIR:-"/etc/spark"}
@@ -106,8 +106,14 @@ if [[ $hadoop_ver == 2.4.* ]] ; then
 elif [[ $hadoop_ver == 2.7.* ]] ; then
   ./bin/spark-sql --verbose \
     --master yarn --deploy-mode client $queue_name \
+    --driver-memory 512M --executor-memory 1G --executor-cores 2 \
+    --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties \
+    --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$spark_conf/yarnclient-driver-log4j.properties,$spark_conf/executor-log4j.properties,$hive_jars \
     --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
     --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
+    --conf spark.executor.extraClassPath=$(basename $sparksql_hivejars):$(basename $sparksql_hivethriftjars) \
+    --conf spark.driver.extraJavaOptions="-Dlog4j.configuration=yarnclient-driver-log4j.properties -Djava.library.path=$HADOOP_HOME/lib/native/" \
+    --conf spark.executor.extraJavaOptions="-Dlog4j.configuration=executor-log4j.properties -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -Djava.library.path=$HADOOP_HOME/lib/native/" \
     -e "$create_database_sql; USE $db_name; $create_table_sql ; $load_data_sql ; $test_window_sql1 ; $test_window_sql2 ; $drop_table_sql ; $drop_database_sql ;"
   sql_ret_code=$?
 else
