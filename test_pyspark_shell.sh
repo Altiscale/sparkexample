@@ -9,7 +9,7 @@ curr_dir=`cd $curr_dir; pwd`
 # Default SPARK_HOME location is already checked by init_spark.sh
 spark_home=${SPARK_HOME:='/opt/spark'}
 if [ ! -d "$spark_home" ] ; then
-  >&2 echo "fail - $spark_home does not exist, please check you Spark installation or SPARK_HOME env variable, exinting!"
+  >&2 echo "fail - $spark_home does not exist, please check you Spark installation or SPARK_HOME env variable, exiting!"
   exit -2
 else
   echo "ok - applying Spark home $spark_home"
@@ -43,7 +43,9 @@ fi
 pushd `pwd`
 cd $spark_home
 hdfs dfs -mkdir -p spark/test/
-hdfs dfs -put $spark_home/README.md spark/test/
+
+# Including spark README.md in test_data to differentiate from sparkexample README.md
+hdfs dfs -put "$spark_test_dir/test_data/README.md" spark/test/
 
 # Leverage a simple use case here
 hdfs dfs -put "$spark_test_dir/src/main/resources/spam_sample.txt" spark/test/
