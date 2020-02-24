@@ -27,10 +27,12 @@
   </properties>
 
   <repositories>
+<!--
     <repository>
       <id>spark-localrepo</id>
       <url>file://${user.home}/.m2/repository</url>
     </repository>
+-->
 <!--
     <repository>
       <id>conjars.org</id>
@@ -56,19 +58,19 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-core_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-sql_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-catalyst_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -80,19 +82,19 @@
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-streaming-kafka-0-8_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-streaming_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-hive_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -146,19 +148,19 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-core_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-sql_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-catalyst_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -170,19 +172,19 @@
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-streaming-kafka-0-8_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-streaming_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-hive_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -236,7 +238,7 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-core_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -248,7 +250,7 @@
           </exclusions>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-sql_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -260,7 +262,7 @@
           </exclusions>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-catalyst_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -272,19 +274,19 @@
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-streaming-kafka-0-10_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-streaming_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
         </dependency>
         <dependency>
-          <groupId>local.org.apache.spark</groupId>
+          <groupId>org.apache.spark</groupId>
           <artifactId>spark-hive_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
           <scope>compile</scope>
@@ -750,7 +752,7 @@
             <configuration>
               <file>${basedir}/../assembly/target/scala-2.10/spark-assembly-${spark.version}-hadoop${hadoop.version}.jar</file>
               <repositoryLayout>file://${basedir}/spark_localrepo</repositoryLayout>
-              <groupId>local.org.apache.spark</groupId>
+              <groupId>org.apache.spark</groupId>
               <artifactId>spark-core_2.10</artifactId>
               <version>1.2.0</version>
             </configuration>
@@ -764,7 +766,7 @@
             <configuration>
               <file>${basedir}/../sql/core/target/spark-sql_2.10-${spark.version}.jar</file>
               <repositoryLayout>file://${basedir}/spark_localrepo</repositoryLayout>
-              <groupId>local.org.apache.spark</groupId>
+              <groupId>org.apache.spark</groupId>
               <artifactId>spark-sql_2.10</artifactId>
               <version>1.2.0</version>
             </configuration>
