@@ -157,8 +157,7 @@ mkdir --mode=0755 -p ${INSTALL_DIR}
 export RPM_DIR="${INSTALL_DIR}/rpm/"
 mkdir -p --mode 0755 ${RPM_DIR}
 
-echo "Packaging spark example rpm with name ${RPM_NAME} with version ${SPARK_VERSION}-${DATE_STRING}"
-echo "Current Directory $(pwd)"
+echo "Packaging spark example rpm with name ${RPM_NAME} with version ${SPARK_VERSION}-${DATE_STRING} in directory $(pwd)"
 
 ##########################
 # Spark EXAMPLE RPM #
@@ -173,9 +172,6 @@ echo "mkdir --mode=0755 -p ${RPM_BUILD_DIR}"
 mkdir --mode=0755 -p "${RPM_BUILD_DIR}"
 
 # deploy test suite and scripts
-echo "In directory $(pwd)"
-echo ""
-
 echo "cp -rp target/*.jar $RPM_BUILD_DIR/"
 cp -rp target/*.jar $RPM_BUILD_DIR/
 
@@ -187,13 +183,7 @@ rm -rf $RPM_BUILD_DIR/sap-xmake-build.sh
 rm -rf $RPM_BUILD_DIR/spark_rpmbuild
 rm -rf $RPM_BUILD_DIR/README.md
 
-echo "ls -lR ./spark_rpmbuild/opt/alti-spark-2.3.2" 
-ls -lR ./spark_rpmbuild/opt/alti-spark-2.3.2 
-echo ""
-echo ""
-
 pushd ${RPM_DIR}
-echo "fpm : $(pwd)"
 
 fpm --verbose \
 --maintainer andrew.lee02@sap.com \
