@@ -81,6 +81,7 @@ queue_name=""
 ./bin/spark-submit --verbose \
   --master yarn --deploy-mode client $queue_name \
   --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties:$hive_jars_colon \
+  --conf spark.pyspark.python=/opt/rh/rh-python36/root/usr/bin/python \
   --conf spark.eventLog.dir=${spark_event_log_dir}/$USER \
   --conf spark.yarn.dist.files=$spark_conf/hive-site.xml,$spark_conf/executor-log4j.properties,$hive_jars \
   --conf spark.yarn.am.extraJavaOptions="-Djava.library.path=$HADOOP_HOME/lib/native/" \
