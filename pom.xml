@@ -503,7 +503,7 @@
         <dependency>
           <groupId>org.codehaus.jackson</groupId>
           <artifactId>jackson-mapper-asl</artifactId>
-          <version>1.8.8</version>
+          <version>${codehaus.jackson.version}</version>
         </dependency>
         <dependency>
           <groupId>org.spark-project.hive</groupId>
@@ -615,7 +615,7 @@
         <dependency>
           <groupId>org.codehaus.jackson</groupId>
           <artifactId>jackson-mapper-asl</artifactId>
-          <version>1.8.8</version>
+          <version>${codehaus.jackson.version}</version>
         </dependency>
         <dependency>
           <groupId>org.spark-project.hive</groupId>
