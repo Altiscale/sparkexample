@@ -9,13 +9,13 @@ if __name__ == "__main__":
 
   # No need to use sqlContext, you will need to use SparkSession to create them now
   # since the older API has been deprecated
-  mySqlContext = SparkSession\
-    .builder\
-    .enableHiveSupport()\
-    .appName("Spark PythonSQL")\
+  mySqlContext = SparkSession \
+    .builder \
+    .enableHiveSupport() \
+    .appName("Spark PythonSQL") \
     .getOrCreate()
 
-  mySqlContext.sql("CREATE TABLE IF NOT EXISTS spark_python_hive_test_table (key INT, value STRING)")
+  mySqlContext.sql("CREATE TABLE IF NOT EXISTS spark_python_hive_test_table (key INT, value STRING) USING hive")
 
   mySqlContext.sql("LOAD DATA LOCAL INPATH '/opt/spark/examples/src/main/resources/kv1.txt' INTO TABLE spark_python_hive_test_table")
 

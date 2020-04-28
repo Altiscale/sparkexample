@@ -61,10 +61,19 @@ if [ ! -f "$spark_test_dir/${app_name}-${app_ver}.jar" ] ; then
   exit -3
 fi
 
+jackson_colon=$(find $spark_home/lib/ -name "jackson-*.jar" | tr -s '\n' ':')
+jackson=$(find $spark_home/lib/ -name "jackson-*.jar" | tr -s '\n' ',')
+common_lang3=$spark_home/lib/commons-lang3-3.9.jar
+netty_jar=$spark_home/lib/netty-all-4.1.47.Final.jar
 sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
-hive_jars_colon=$sparksql_hivejars:$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ':')
-hive_jars=$sparksql_hivejars,$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ',')
+# hive_jars_colon=$jackson_colon:$common_lang3:$netty_jar:$sparksql_hivejars:$(find $HIVE_HOME/lib/ -type f -name "*.jar" ! -name "javax.servlet-*" | tr -s '\n' ':')
+hive_jars_colon=$jackson_colon:$common_lang3:$netty_jar:$sparksql_hivejars:$HIVE_HOME/lib/hive-exec-$HIVE_VERSION.jar
+# hive_jars=$jackson,$common_lang3,$netty_jar,$sparksql_hivejars,$(find $HIVE_HOME/lib/ -type f -name "*.jar" ! -name "javax.servlet-*" | tr -s '\n' ',')
+hive_jars=$jackson,$common_lang3,$netty_jar,$sparksql_hivejars,$HIVE_HOME/lib/hive-exec-$HIVE_VERSION.jar
 spark_event_log_dir=$(grep 'spark.eventLog.dir' ${spark_conf}/spark-defaults.conf | tr -s ' ' '\t' | cut -f2)
+
+export PYTHONPATH=$spark_home/python/:$PYTHONPATH
+export PYTHONPATH=$spark_home/python/lib/py4j-0.10.8.1-src.zip:$PYTHONPATH
 
 # pyspark only supports yarn-client mode now
 # queue_name="--queue interactive"
