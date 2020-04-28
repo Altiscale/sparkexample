@@ -8,19 +8,19 @@
   <groupId>com.altiscale.testsuite</groupId>
   <artifactId>altiscale-spark-test-case</artifactId>
   <packaging>jar</packaging>
-  <version>2.3</version>
+  <version>3.0</version>
 
   <!-- Define default values -->
   <properties>
     <java.version>1.8</java.version>
-    <spark.version>2.3.2</spark.version>
-    <hadoop.version>2.7.3</hadoop.version>
+    <spark.version>3.0.0</spark.version>
+    <hadoop.version>2.7.7</hadoop.version>
     <!-- hive.version here refers to Spark custom built hive JARs with groupId org.spark-project.hive -->
     <hive.version>1.2.1.spark2</hive.version>
     <yarn.version>${hadoop.version}</yarn.version>
-    <avro.version>1.7.7</avro.version>
-    <scala.version>2.11.8</scala.version>
-    <scala.binary.version>2.11</scala.binary.version>
+    <avro.version>1.8.2</avro.version>
+    <scala.version>2.12.10</scala.version>
+    <scala.binary.version>2.12</scala.binary.version>
     <avro.mapred.classifier>hadoop2</avro.mapred.classifier>
     <httpclient.classic.version>3.1</httpclient.classic.version>
     <codehaus.jackson.version>1.9.13</codehaus.jackson.version>
@@ -651,7 +651,7 @@
       <id>hadoop27-provided</id>
 <!-- use globally defined properties as the default corresponds to spark-2.3
       <properties>
-        <hadoop.version>2.7.3</hadoop.version>
+        <hadoop.version>2.7.7</hadoop.version>
         <hive.version>${hive.version}</hive.version>
         <yarn.version>${hadoop.version}</yarn.version>
       </properties>
@@ -799,7 +799,7 @@
         <dependency>
           <groupId>org.apache.kafka</groupId>
           <artifactId>kafka_${scala.binary.version}</artifactId>
-          <version>0.10.0.1</version>
+          <version>0.10.1.1</version>
           <exclusions>
             <exclusion>
               <groupId>com.sun.jmx</groupId>
