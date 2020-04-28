@@ -53,8 +53,8 @@ if __name__ == "__main__":
   # the same HashingTF feature transformation to get vectors, then apply the model.
   posTest = tf.transform("O M G GET cheap stuff by sending money to ".split(" "))
   negTest = tf.transform("Hi Dad, I started studying Spark the other ".split(" "))
-  print "Prediction for positive test example: %g" % model.predict(posTest)
-  print "Prediction for negative test example: %g" % model.predict(negTest)
+  print("Prediction for positive test example: " + str(model.predict(posTest)))
+  print("Prediction for negative test example: " + str(model.predict(negTest)))
   
   from numpy import array
   from pyspark.mllib.linalg import Vectors
@@ -80,7 +80,7 @@ if __name__ == "__main__":
   # TF-IDF Test
   from pyspark.mllib.feature import HashingTF, IDF
   # Read a set of text files as TF vectors
-  rdd = sc.wholeTextFiles("spark/test/README.md").map(lambda (name, text): text.split())
+  rdd = sc.textFile("spark/test/README.md").map(lambda line: line.split(" "))
   tf = HashingTF()
   tfVectors = tf.transform(rdd).cache()
   # Compute the IDF, then the TF-IDF vectors
@@ -192,7 +192,7 @@ if __name__ == "__main__":
   from pyspark.mllib.clustering import KMeans
   data = array([0.0,0.0, 1.0,1.0, 9.0,8.0, 8.0,9.0]).reshape(4, 2)
   model = KMeans.train(
-       sc.parallelize(data), 2, maxIterations=10, runs=30, initializationMode="random")
+       sc.parallelize(data), 2, maxIterations=10, initializationMode="random")
   model.predict(array([0.0, 0.0])) == model.predict(array([1.0, 1.0]))
   model.predict(array([8.0, 9.0])) == model.predict(array([9.0, 8.0]))
   model = KMeans.train(sc.parallelize(data), 2)
