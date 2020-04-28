@@ -4,7 +4,7 @@
 # Multiple invocation will result in corrupted zip file
 # Last run wins
 
-spark_conf=${SPARK_CONF_DIR:-"/etc/spark"}
+spark_conf=${SPARK_CONF_DIR:-"/home/sts/sts/alti-spark-3.0.0"}
 source $spark_conf/spark-env.sh
 
 mypid=$$
@@ -32,7 +32,7 @@ if  [ "x$gen_hive_lib_zip" = "xtrue" ] ; then
   echo "ok - generating first time hive libs $tmp_hive_lib_zip_tmp for pre-deployment"
   rm -f "$tmp_hive_lib_zip_tmp"
   pushd $hive_lib_dir
-  zip --quiet -r $tmp_hive_lib_zip_tmp *
+  zip --quiet --exclude javax.servlet-\* -r $tmp_hive_lib_zip_tmp *
   unzip -qt $tmp_hive_lib_zip_tmp
   ret=$?
   popd
@@ -52,4 +52,5 @@ fi
 
 # Upload the HDFS regardless
 hdfs dfs -mkdir /user/$USER/apps
+hdfs dfs -rm /user/$USER/apps/$tmp_hive_fname_zip
 hdfs dfs -put $tmp_hive_lib_zip /user/$USER/apps/$tmp_hive_fname_zip
