@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import org.apache.spark.Logging
+import org.apache.spark.internal.Logging
 
 import org.apache.log4j.{Level, Logger}
 
