@@ -6,7 +6,7 @@ curr_dir=`dirname $0`
 curr_dir=`cd $curr_dir; pwd`
 git_hash=""
 
-export M2_HOME=/opt/mvn3.5.4
+export M2_HOME=/opt/mvn3.6.3
 cp -f /maven/settings.xml ${M2_HOME}/conf/
 export JAVA_HOME=/opt/java
 
@@ -20,19 +20,19 @@ fi
 
 export PATH=$M2_HOME/bin:$JAVA_HOME/bin:$PATH:$R_HOME
 
-export HADOOP_VERSION=${HADOOP_VERSION:-"2.7.3"}
-export HIVE_VERSION=${HIVE_VERSION:-"2.1.1"}
+export HADOOP_VERSION=${HADOOP_VERSION:-"2.7.7"}
+export HIVE_VERSION=${HIVE_VERSION:-"2.3.3"}
 # Define default spark uid:gid and build version
 # and all other Spark build related env
 export SPARK_PKG_NAME=${SPARK_PKG_NAME:-"spark"}
 export SPARK_GID=${SPARK_GID:-"411460017"}
 export SPARK_UID=${SPARK_UID:-"411460024"}
-export SPARK_VERSION=${SPARK_VERSION:-"2.3.2"}
-export SCALA_VERSION=${SCALA_VERSION:-"2.11"}
+export SPARK_VERSION=${SPARK_VERSION:-"3.0.0"}
+export SCALA_VERSION=${SCALA_VERSION:-"2.12"}
 
 if [[ $SPARK_VERSION == 2.* ]] ; then
-  if [[ $SCALA_VERSION != 2.11 ]] ; then
-    2>&1 echo "error - scala version requires 2.11+ for Spark $SPARK_VERSION, can't continue building, exiting!"
+  if [[ $SCALA_VERSION != 2.12 ]] ; then
+    2>&1 echo "error - scala version requires 2.12+ for Spark $SPARK_VERSION, can't continue building, exiting!"
     exit -1
   fi
 fi
@@ -47,7 +47,7 @@ export BUILD_TIME=$(date +%Y%m%d%H%M)
 export MAVEN_OPTS=${MAVEN_OPTS:-"-Xmx2048m -XX:MaxPermSize=1024m"}
 export PRODUCTION_RELEASE=${PRODUCTION_RELEASE:-"false"}
 
-export PACKAGE_BRANCH=${PACKAGE_BRANCH:-"branch-2.3.2-alti"}
+export PACKAGE_BRANCH=${PACKAGE_BRANCH:-"branch-3.0.0-alti"}
 DEBUG_MAVEN=${DEBUG_MAVEN:-"false"}
 
 if [ "x${PACKAGE_BRANCH}" = "x" ] ; then
@@ -130,9 +130,9 @@ fi
 echo "Starting build of sparkexample in $(pwd)"
 DATE_STRING=`date +%Y%m%d%H%M%S`
 if [ "x${DEBUG_MAVEN}" = "xtrue" ] ; then
-  mvn_cmd="mvn -U -X package -Pspark-2.3 -Pkafka10-provided $testcase_hadoop_profile_str --log-ile mvnbuild_${DATE_STRING}.log"
+  mvn_cmd="mvn -U -X package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-ile mvnbuild_${DATE_STRING}.log"
 else
-  mvn_cmd="mvn -U package -Pspark-2.3 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
+  mvn_cmd="mvn -U package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
 fi
 
 echo "$mvn_cmd"
