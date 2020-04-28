@@ -1,12 +1,20 @@
 import os
-  
-from pyspark import SparkContext
-# sc is an existing SparkContext.
-from pyspark.sql import HiveContext
-  
+
+from pyspark.sql import SparkSession
+
+# sc is an existing SparkContext. Use SparkSession onward to avoid
+# unintentional upgrade on SparkContext or specifying legacy option.
+# Read: https://sc.apache.org/docs/3.0.0-preview/sql-migration-guide.html#upgrading-from-spark-sql-23-to-24
+# HiveContext is removed in 3.0.0, don't use it.
+
 if __name__ == "__main__":
-  sc = SparkContext(appName="PySpark Shell MLLib Examples")
-  
+  spark = SparkSession\
+          .builder\
+          .appName("PySpark Shell MLLib Examples")\
+          .getOrCreate()
+
+  sc = spark.sparkContext
+ 
   # Basic pyspark core test case
   file=sc.textFile("spark/test/README.md")
   errors = file.filter(lambda line: "scala" in line)
