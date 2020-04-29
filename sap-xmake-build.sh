@@ -48,7 +48,7 @@ export MAVEN_OPTS=${MAVEN_OPTS:-"-Xmx2048m -XX:MaxPermSize=1024m"}
 export PRODUCTION_RELEASE=${PRODUCTION_RELEASE:-"false"}
 
 export PACKAGE_BRANCH=${PACKAGE_BRANCH:-"branch-3.0.0-alti"}
-DEBUG_MAVEN=${DEBUG_MAVEN:-"false"}
+DEBUG_MAVEN=${DEBUG_MAVEN:-"true"}
 
 if [ "x${PACKAGE_BRANCH}" = "x" ] ; then
   echo "error - PACKAGE_BRANCH is not defined. Please specify the branch explicitly. Exiting!"
