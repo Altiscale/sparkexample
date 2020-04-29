@@ -20,7 +20,7 @@ fi
 
 export PATH=$M2_HOME/bin:$JAVA_HOME/bin:$PATH:$R_HOME
 
-export HADOOP_VERSION=${HADOOP_VERSION:-"2.7.3"}
+export HADOOP_VERSION=${HADOOP_VERSION:-"2.7.7"}
 export HIVE_VERSION=${HIVE_VERSION:-"2.1.1"}
 # Define default spark uid:gid and build version
 # and all other Spark build related env
@@ -47,7 +47,7 @@ export BUILD_TIME=$(date +%Y%m%d%H%M)
 export MAVEN_OPTS=${MAVEN_OPTS:-"-Xmx2048m -XX:MaxPermSize=1024m"}
 export PRODUCTION_RELEASE=${PRODUCTION_RELEASE:-"false"}
 
-export PACKAGE_BRANCH=${PACKAGE_BRANCH:-"branch-2.3.2-alti"}
+export PACKAGE_BRANCH=${PACKAGE_BRANCH:-"sap-branch-2.3.2-alti"}
 DEBUG_MAVEN=${DEBUG_MAVEN:-"false"}
 
 if [ "x${PACKAGE_BRANCH}" = "x" ] ; then
