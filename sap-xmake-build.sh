@@ -47,7 +47,7 @@ export BUILD_TIME=$(date +%Y%m%d%H%M)
 export MAVEN_OPTS=${MAVEN_OPTS:-"-Xmx2048m -XX:MaxPermSize=1024m"}
 export PRODUCTION_RELEASE=${PRODUCTION_RELEASE:-"false"}
 
-export PACKAGE_BRANCH=${PACKAGE_BRANCH:-"branch-3.0.0-alti"}
+export PACKAGE_BRANCH=${PACKAGE_BRANCH:-"sap-branch-3.0.0-alti"}
 DEBUG_MAVEN=${DEBUG_MAVEN:-"true"}
 
 if [ "x${PACKAGE_BRANCH}" = "x" ] ; then
@@ -147,7 +147,7 @@ fi
 
 # Build RPM
 export RPM_EXAMPLE_NAME=`echo alti-spark-${SPARK_VERSION}-example`
-export RPM_DESCRIPTION="Apache Spark ${SPARK_VERSION}\n\n${DESCRIPTION}"
+export RPM_DESCRIPTION="Apache Spark ${SPARK_VERSION} Examples\n\n${DESCRIPTION}"
 
 DATE_STRING=`date +%Y%m%d%H%M%S`
 GIT_REPO="https://github.com/Altiscale/sparkexample"
@@ -191,7 +191,7 @@ fpm --verbose \
 --provides ${RPM_EXAMPLE_NAME} \
 --description "$(printf "${RPM_DESCRIPTION}")" \
 --replaces ${RPM_EXAMPLE_NAME} \
---url "${GITREPO}" \
+--url "${GIT_REPO}" \
 --license "Apache License v2" \
 --epoch 1 \
 --rpm-os linux \
@@ -209,7 +209,7 @@ fpm --verbose \
 --template-value pkgname=$RPM_EXAMPLE_NAME \
 --rpm-auto-add-directories \
 -C ${INSTALL_DIR} \
-opt
+opt/alti-spark-$SPARK_VERSION/test_spark
 
 echo "Finished packaging spark example rpm"
 
