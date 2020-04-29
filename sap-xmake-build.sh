@@ -204,9 +204,6 @@ fpm --verbose \
 --iteration ${DATE_STRING} \
 --rpm-user root \
 --rpm-group root \
---template-value version=$SPARK_VERSION \
---template-value scala_version=$SCALA_VERSION \
---template-value pkgname=$RPM_EXAMPLE_NAME \
 --rpm-auto-add-directories \
 -C ${INSTALL_DIR} \
 opt/alti-spark-$SPARK_VERSION/test_spark
