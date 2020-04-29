@@ -130,7 +130,7 @@ fi
 echo "Starting build of sparkexample in $(pwd)"
 DATE_STRING=`date +%Y%m%d%H%M%S`
 if [ "x${DEBUG_MAVEN}" = "xtrue" ] ; then
-  mvn_cmd="mvn -U -X package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-ile mvnbuild_${DATE_STRING}.log"
+  mvn_cmd="mvn -U -X package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
 else
   mvn_cmd="mvn -U package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
 fi
