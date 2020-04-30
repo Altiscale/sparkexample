@@ -81,15 +81,18 @@ test_drop_database_sql1="USE default; DROP DATABASE IF EXISTS ${db_name}"
 hadoop_ver=$(hadoop version | head -n 1 | grep -o 2.*.* | cut -d"-" -f1 | tr -d '\n')
 sparksql_hivejars="$spark_home/lib/spark-hive_${SPARK_SCALA_VERSION}.jar"
 sparksql_hivethriftjars="$spark_home/lib/spark-hive-thriftserver_${SPARK_SCALA_VERSION}.jar"
-# hive_jars=$sparksql_hivejars,$sparksql_hivethriftjars,$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ',')
-hive_jars=$sparksql_hivejars,$sparksql_hivethriftjars,$HIVE_HOME/lib/hive-exec-1.2.1.jar
-hive_jars_colon=$sparksql_hivejars:$sparksql_hivethriftjars:$(find $HIVE_HOME/lib/ -type f -name "*.jar" | tr -s '\n' ':')
+hive_jars=$sparksql_hivejars,$sparksql_hivethriftjars,$hive_home/lib/hive-exec-${HIVE_VERSION}.jar
+hive_jars_colon=$sparksql_hivejars:$sparksql_hivethriftjars:$(find $hive_home/lib/ -type f -name "*.jar" | tr -s '\n' ':')
 
 echo "ok - detected hadoop version $hadoop_ver for testing. CTAS does not work on Hive 0.13.1"
+
+echo "ok - performing hive test DB cleanup"
+hdfs dfs -rm -r /tmp/parquet_data
+hive -e "DROP TABLE hive_records; DROP TABLE hive_ints; DROP TABLE hive_part_tbl; DROP TABLE hive_bigints; SHOW TABLES;"
+
 # queue_name="--queue interactive"
 queue_name=""
 sql_ret_code=""
-# Also demonstrate how to migrate command from Spark 1.4/1.5 to 1.6+
   ./bin/run-example --verbose \
     --executor-memory 1G --executor-cores 2 \
     --driver-class-path $spark_conf/hive-site.xml:$spark_conf/yarnclient-driver-log4j.properties $queue_name \
