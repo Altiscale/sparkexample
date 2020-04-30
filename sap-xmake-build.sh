@@ -94,14 +94,7 @@ env | sort
 # This will build the overall JARs we need in each folder
 # and install them locally for further reference. We assume the build
 # environment is clean, so we don't need to delete ~/.ivy2 and ~/.m2
-# Default JDK version applied is 1.7 here.
-
-# hadoop.version, yarn.version, and hive.version are all defined in maven profile now
-# they are tied to each profile.
-# hadoop-2.2 No longer supported, removed.
-# hadoop-2.4 hadoop.version=2.4.1 yarn.version=2.4.1 hive.version=0.13.1a hive.short.version=0.13.1
-# hadoop-2.6 hadoop.version=2.6.0 yarn.version=2.6.0 hive.version=1.2.1.spark hive.short.version=1.2.1
-# hadoop-2.7 hadoop.version=2.7.1 yarn.version=2.7.1 hive.version=1.2.1.spark hive.short.version=1.2.1
+# Default JDK version applied is 1.8 here.
 
 testcase_hadoop_profile_str=""
 if [[ $SPARK_HADOOP_VERSION == 2.4.* ]] ; then
@@ -127,12 +120,20 @@ fi
 #   mvn_release_flag="-Psnapshots"
 # fi
 
+# Apply localizaed nexus settings.xml to point to nexus
+mvn_settings=""
+if [ -f /opt/mvn3.3.9/conf/settings.xml ] ; then
+  mvn_settings="--settings /opt/mvn3.3.9/conf/settings.xml"
+else
+  echo "warn - you are relying on ~/.m2/settings.xml or the settings.xml provided by maven package!"
+fi
+
 echo "Starting build of sparkexample in $(pwd)"
 DATE_STRING=`date +%Y%m%d%H%M%S`
 if [ "x${DEBUG_MAVEN}" = "xtrue" ] ; then
-  mvn_cmd="mvn -U -X package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
+  mvn_cmd="mvn -U -X $mvn_settings package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
 else
-  mvn_cmd="mvn -U package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
+  mvn_cmd="mvn -U $mvn_settings package -Pspark-3.0 -Pkafka10-provided $testcase_hadoop_profile_str --log-file mvnbuild_${DATE_STRING}.log"
 fi
 
 echo "$mvn_cmd"
