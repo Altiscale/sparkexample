@@ -162,7 +162,7 @@ echo "Packaging spark example rpm with name ${RPM_NAME} with version ${SPARK_VER
 ##########################
 # Spark EXAMPLE RPM #
 ##########################
-export RPM_BUILD_DIR=${INSTALL_DIR}/opt/alti-spark-${SPARK_VERSION}/test_spark
+export RPM_BUILD_DIR=${INSTALL_DIR}/tmp/alti-spark-${SPARK_VERSION}/test_spark
 echo "RPM_BUILD_DIR: ${RPM_BUILD_DIR}"
 
 # Generate RPM based on where spark artifacts are placed from previous steps
@@ -175,7 +175,7 @@ mkdir --mode=0755 -p "${RPM_BUILD_DIR}"
 echo "cp -rp target/*.jar $RPM_BUILD_DIR/"
 cp -rp target/*.jar $RPM_BUILD_DIR/
 
-echo "cp -rp * $RPM_BUILD_DIR/"
+echo "cp -rp target/* $RPM_BUILD_DIR/"
 cp -rp * $RPM_BUILD_DIR/
 rm -rf $RPM_BUILD_DIR/localbuild.sh
 rm -rf $RPM_BUILD_DIR/*.log
@@ -209,7 +209,7 @@ fpm --verbose \
 --template-value pkgname=$RPM_EXAMPLE_NAME \
 --rpm-auto-add-directories \
 -C ${INSTALL_DIR} \
-opt
+tmp/alti-spark-$SPARK_VERSION/test_spark=/opt/alti-spark-2.3.2/
 
 echo "Finished packaging spark example rpm"
 
