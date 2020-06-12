@@ -27,7 +27,9 @@ export HIVE_VERSION=${HIVE_VERSION:-"2.1.1"}
 export SPARK_PKG_NAME=${SPARK_PKG_NAME:-"spark"}
 export SPARK_GID=${SPARK_GID:-"411460017"}
 export SPARK_UID=${SPARK_UID:-"411460024"}
-export SPARK_VERSION=${SPARK_VERSION:-"2.3.2"}
+# XMAKE_PROJECT_BASE_VERSION derived from cfg/VERSION file
+RELEASE=$(echo $XMAKE_PROJECT_BASE_VERSION | cut -d- -f2)
+export SPARK_VERSION=$(echo $XMAKE_PROJECT_BASE_VERSION | cut -d- -f1)
 export SCALA_VERSION=${SCALA_VERSION:-"2.11"}
 
 if [[ $SPARK_VERSION == 2.* ]] ; then
@@ -201,7 +203,7 @@ fpm --verbose \
 -t rpm \
 -n ${RPM_EXAMPLE_NAME} \
 -v ${SPARK_VERSION} \
---iteration ${DATE_STRING} \
+--iteration ${RELEASE} \
 --rpm-user root \
 --rpm-group root \
 --template-value version=$SPARK_VERSION \
@@ -219,7 +221,8 @@ if [ $? -ne 0 ] ; then
   exit -1
 fi
 
-mv "${RPM_DIR}${RPM_EXAMPLE_NAME}-${SPARK_VERSION}-${DATE_STRING}.noarch.rpm" "${RPM_DIR}${RPM_EXAMPLE_NAME}.rpm"
+SAP_EXAMPLE_RPM_NAME="sap-${RPM_EXAMPLE_NAME}-${SPARK_VERSION}-${RELEASE}.noarch"
+mv "${RPM_DIR}${RPM_EXAMPLE_NAME}-${SPARK_VERSION}-${DATE_STRING}.noarch.rpm" "${RPM_DIR}${SAP_EXAMPLE_RPM_NAME}.rpm"
 
 echo "ok - spark $RPM_EXAMPLE_NAME and RPM completed successfully!"
 
