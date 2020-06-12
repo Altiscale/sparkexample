@@ -222,7 +222,9 @@ if [ $? -ne 0 ] ; then
 fi
 
 SAP_EXAMPLE_RPM_NAME="sap-${RPM_EXAMPLE_NAME}-${SPARK_VERSION}-${RELEASE}.noarch"
-mv "${RPM_DIR}${RPM_EXAMPLE_NAME}-${SPARK_VERSION}-${DATE_STRING}.noarch.rpm" "${RPM_DIR}${SAP_EXAMPLE_RPM_NAME}.rpm"
+mv "${RPM_DIR}${RPM_EXAMPLE_NAME}-${SPARK_VERSION}-${RELEASE}.noarch.rpm" "${RPM_DIR}${SAP_EXAMPLE_RPM_NAME}.rpm"
+
+ls -al "${RPM_DIR}${SAP_EXAMPLE_RPM_NAME}.rpm"
 
 echo "ok - spark $RPM_EXAMPLE_NAME and RPM completed successfully!"
 
